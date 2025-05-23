@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thailand Move Planner: Your 5-Year Journey</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Visualization & Content Choices: 
+        - Planning Categories (e.g., Important Information, Properties): Goal: Organize. Method: Sidebar navigation tabs. Interaction: Click to display category content. Justification: Standard, intuitive navigation for structured planning data.
+        - Content Items (e.g., "Visa Requirements," "Rental Market Overview"): Goal: Inform, Analyze. Method: Text content blocks (headings, lists, paragraphs). Interaction: Scroll, read. Justification: Direct presentation of textual and qualitative information.
+        - "5-Year Planning Timeline": Goal: Change (over time). Method: Chart.js Bar Chart (conceptual tasks over years). Interaction: View. Justification: Visual representation of phased tasks, providing a high-level overview. Library: Chart.js.
+        - Unicode icons (e.g., 🏠 for properties, ✈️ for travel): Goal: Enhance visual appeal/clarity. Method: HTML Unicode. Interaction: View. Justification: Lightweight, universally understood visual cues.
+        CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .content-section { display: none; }
+        .content-section.active { display: block; }
+        .sidebar-link.active {
+            background-color: #0D9488;
+            color: white;
+        }
+        .content-card {
+            background-color: white;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            transition: transform 0.2s ease-in-out;
+        }
+        .content-card:hover {
+            transform: translateY(-2px);
+        }
+        .content-card h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #1F2937;
+            margin-bottom: 0.75rem;
+        }
+        .content-card ul {
+            list-style-type: disc;
+            margin-left: 1.25rem;
+            color: #4B5563;
+        }
+        .content-card ul li {
+            margin-bottom: 0.25rem;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+            max-height: 450px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 400px;
+            }
+        }
+        .section-intro {
+            padding: 1rem 0;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #D1D5DB;
+            color: #374151;
+        }
+        .section-intro h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #0D9488;
+        }
+        .section-intro p {
+            margin-top: 0.5rem;
+            font-size: 1rem;
+        }
+        .video-embed-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+            padding: 0.75rem;
+            background-color: #F9FAFB;
+            border-radius: 0.375rem;
+            border: 1px solid #E5E7EB;
+        }
+        .video-embed-container p {
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            color: #4B5563;
+            text-align: center;
+        }
+        .resource-link {
+            display: block;
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+            color: #0D9488;
+            text-decoration: underline;
+            text-align: center;
+        }
+        .resource-image {
+            max-width: 200px;
+            height: auto;
+            margin-top: 0.5rem;
+            border-radius: 0.375rem;
+        }
+        .sticky-bottom-right {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 120px; /* Adjust size as needed */
+            z-index: 1000;
+            pointer-events: none; /* Optional: makes image non-interactive */
+        }
+    </style>
+</head>
+<body class="bg-stone-100 text-stone-800 flex min-h-screen">
+
+    <aside class="w-64 bg-stone-50 p-6 shadow-lg fixed top-0 left-0 h-full overflow-y-auto">
+        <h1 class="text-2xl font-bold text-teal-700 mb-8">Move to Thailand</h1>
+        <p><img src="flag.jpg"></p>
+        <br>
+        <nav id="move-nav">
+            <ul>
+                <li><a href="#" class="sidebar-link block py-2 px-3 mb-2 rounded-md hover:bg-teal-100 hover:text-teal-700 transition-colors" data-section="important_info">Important Information</a></li>
+                <li><a href="#" class="sidebar-link block py-2 px-3 mb-2 rounded-md hover:bg-teal-100 hover:text-teal-700 transition-colors" data-section="lists">Lists</a></li>
+                <li><a href="#" class="sidebar-link block py-2 px-3 mb-2 rounded-md hover:bg-teal-100 hover:text-teal-700 transition-colors" data-section="properties">Properties</a></li>
+                <li><a href="#" class="sidebar-link block py-2 px-3 mb-2 rounded-md hover:bg-teal-100 hover:text-teal-700 transition-colors" data-section="insurances">Insurance(s)</a></li>
+                <li><a href="#" class="sidebar-link block py-2 px-3 mb-2 rounded-md hover:bg-teal-100 hover:text-teal-700 transition-colors" data-section="first_week_month">First Week / Month</a></li>
+                <li><a href="#" class="sidebar-link block py-2 px-3 mb-2 rounded-md hover:bg-teal-100 hover:text-teal-700 transition-colors" data-section="language">Language</a></li>
+                <li><a href="#" class="sidebar-link block py-2 px-3 mb-2 rounded-md hover:bg-teal-100 hover:text-teal-700 transition-colors" data-section="food">Food</a></li>
+                <li><a href="#" class="sidebar-link block py-2 px-3 mb-2 rounded-md hover:bg-teal-100 hover:text-teal-700 transition-colors" data-section="travel">Travel</a></li>
+                <li><a href="#" class="sidebar-link block py-2 px-3 mb-2 rounded-md hover:bg-teal-100 hover:text-teal-700 transition-colors" data-section="misc">Misc</a></li>
+                <li><a href="#" class="sidebar-link block py-2 px-3 mb-2 rounded-md hover:bg-teal-100 hover:text-teal-700 transition-colors" data-section="links">Links</a></li>
+                <li><a href="#" class="sidebar-link block py-2 px-3 mb-2 rounded-md hover:bg-teal-100 hover:text-teal-700 transition-colors" data-section="youtube_channels">YouTube Channels</a></li>
+            </ul>
+        </nav>
+    </aside>
+
+    <main class="flex-1 p-8 ml-64 overflow-y-auto">
+        
+        <section id="important_info" class="content-section">
+            <div class="section-intro">
+                <h2>Important Information 💡</h2>
+                <p>This section covers crucial foundational details for your move to Thailand, including visa requirements, financial planning, and a conceptual timeline to guide your 5-year preparation.</p>
+            </div>
+            <div class="content-card">
+                <h3>Visa Requirements</h3>
+                <p>For long-term stays in Thailand, common visa types include: </p>
+                <ul>
+                    <li><strong>Non-Immigrant O-A (Long Stay):</strong> For those aged 50 and above, valid for one year.</li>
+                    <li><strong>Non-Immigrant B (Business/Work):</strong> For employment or business. Requires a work permit.</li>
+                    <li><strong>Marriage Visa:</strong> For those married to a Thai national.</li>
+                    <li><strong>Education Visa (ED Visa):</strong> For studying Thai language or other courses.</li>
+                </ul>
+                <p>Start researching specific requirements and application processes at least 1-2 years before your planned move date. Requirements can change, so always check the official Thai embassy/consulate website in your country.</p>
+            </div>
+            <div class="content-card">
+                <h3>Financial Planning & Cost of Living</h3>
+                <p>Consider the following aspects for your budget:</p>
+                <ul>
+                    <li><strong>Accommodation:</strong> Rent for condos/houses varies widely by city and size.</li>
+                    <li><strong>Food:</strong> Local street food is very affordable; Western food is more expensive.</li>
+                    <li><strong>Transportation:</strong> Public transport, Grab (ride-hailing), scooters.</li>
+                    <li><strong>Healthcare:</strong> Private hospitals are excellent but costly without insurance.</li>
+                    <li><strong>Visa Renewals:</strong> Annual costs for extending your stay.</li>
+                </ul>
+                <p>A comfortable monthly budget for a couple outside major tourist hubs might range from ฿40,000 - ฿80,000 (approx. $1,100 - $2,200 USD), excluding rent. Bangkok and popular islands will be higher.</p>
+            </div>
+            <div class="content-card">
+                <h3>5-Year Planning Timeline</h3>
+                <p>This conceptual timeline outlines key milestones over the next five years to help you prepare for your move. Each bar represents a period for focusing on specific tasks.</p>
+                <div class="chart-container mt-4">
+                    <canvas id="planningTimelineChart"></canvas>
+                </div>
+            </div>
+            <div class="content-card">
+                <h3>Additional Resources</h3>
+                <div class="video-embed-container">
+                    <p>Big Tax Changes for 2024</p>
+                    <iframe width="200" height="113" src="https://www.youtube.com/embed/4" frameborder="0" allowfullscreen></iframe>
+                </div>
+                <div class="video-embed-container">
+                    <p>You Get the Thailand Elite Visa (Privilege Card)? - Full Honest Review</p>
+                    <iframe width="200" height="113" src="https://www.youtube.com/embed/6" frameborder="0" allowfullscreen></iframe>
+                </div>
+                <div class="video-embed-container">
+                    <p>Much Money You REALLY Need to Retire in Thailand</p>
+                    <iframe width="200" height="113" src="https://www.youtube.com/embed/8" frameborder="0" allowfullscreen></iframe>
+                </div>
+                <div class="video-embed-container">
+                    <p>Holy Grail of Thai Visas (Thai Long-Term Visas by Thailand Privilege Card)</p>
+                    <iframe width="200" height="113" src="https://www.youtube.com/embed/13" frameborder="0" allowfullscreen></iframe>
+                </div>
+                <div class="video-embed-container">
+                    <p>Money Transfer</p>
+                    <a href="https://wise.com/?clickref=1110l3LADs4&partnerID=1101l340452&utm_medium=affiliate&utm_campaign=0&adref=&utm_source=thebangkokguide&partnerizecampaignID=1100l645" target="_blank" class="resource-link">wise.com</a>
+                </div>
+            </div>
+        </section>
+
+        <section id="lists" class="content-section">
+            <div class="section-intro">
+                <h2>Lists ✅</h2>
+                <p>This section provides practical checklists and lists of items to consider for your move, helping you keep track of what needs to be done and what to bring.</p>
+            </div>
+            <div class="content-card">
+                <h3>Pre-Move Checklist (Year 1-3)</h3>
+                <ul>
+                    <li>Research visa options thoroughly.</li>
+                    <li>Start learning basic Thai phrases.</li>
+                    <li>Save aggressively for initial setup costs.</li>
+                    <li>Declutter and decide what to ship/sell/donate.</li>
+                    <li>Research potential cities/regions to live in.</li>
+                    <li>Get international driving permit (if applicable).</li>
+                </ul>
+            </div>
+            <div class="content-card">
+                <h3>Pre-Move Checklist (Year 4-5)</h3>
+                <ul>
+                    <li>Apply for long-stay visa.</li>
+                    <li>Book flights and temporary accommodation.</li>
+                    <li>Arrange for international health insurance.</li>
+                    <li>Notify banks, mail, and other services.</li>
+                    <li>Scan and backup all important documents.</li>
+                    <li>Get necessary vaccinations.</li>
+                </ul>
+            </div>
+            <div class="content-card">
+                <h3>Packing Essentials</h3>
+                <ul>
+                    <li>Lightweight, breathable clothing.</li>
+                    <li>Sunscreen and insect repellent.</li>
+                    <li>Any specific medications with prescriptions.</li>
+                    <li>Adapters for electrical outlets.</li>
+                    <li>Comfortable walking shoes/sandals.</li>
+                    <li>Important documents (passport, visa, etc.).</li>
+                </ul>
+            </div>
+            <div class="content-card">
+                <h3>Additional Resources</h3>
+                <div class="video-embed-container">
+                    <p>TO THAILAND IN 2024: Use This Checklist</p>
+                    <iframe width="200" height="113" src="https://www.youtube.com/embed/5" frameborder="0" allowfullscreen></iframe>
+                </div>
+                <div class="video-embed-container">
+                    <p>What to bring? Rain: (Zip loc bags, waterproof bag, waterproof sandals, poncho)</p>
+                    <p>Consider packing these items for rainy season preparedness.</p>
+                </div>
+                <div class="video-embed-container">
+                    <p>Ultimate Thailand checklist</p>
+                    <a href="https://docs.google.com/document/d/1awrEv_QiyR33s3rsoknZGJoJKNapatP_wlJBqhY8sSs/edit?tab=t.0" target="_blank" class="resource-link">Google Docs Checklist</a>
+                </div>
+            </div>
+        </section>
+
+        <section id="properties" class="content-section">
+            <div class="section-intro">
+                <h2>Properties 🏠</h2>
+                <p>Explore different housing options in Thailand, understand the rental market, and consider what kind of property might best suit your lifestyle and budget.</p>
+            </div>
+            <div class="content-card">
+                <h3>Rental Market Overview</h3>
+                <p>Thailand offers a variety of rental properties:</p>
+                <ul>
+                    <li><strong>Condominiums:</strong> Popular in cities like Bangkok, Chiang Mai. Often come fully furnished with amenities (pool, gym).</li>
+                    <li><strong>Houses/Villas:</strong> More common outside city centers, offering more space and privacy.</li>
+                    <li><strong>Apartments:</strong> Simpler, often unfurnished units.</li>
+                </ul>
+                <p>Rental contracts are typically 6-12 months. Expect to pay 1-2 months' rent as a security deposit plus one month's rent in advance.</p>
+            </div>
+            <div class="content-card">
+                <h3>Finding a Property</h3>
+                <p>Key strategies for your property search:</p>
+                <ul>
+                    <li><strong>Online Portals:</strong> Hipflat, DDproperty, PropertyGuru.</li>
+                    <li><strong>Local Real Estate Agents:</strong> Especially useful for navigating local nuances and language barriers.</li>
+                    <li><strong>Facebook Groups:</strong> Many expat groups have property listings.</li>
+                    <li><strong>On-the-ground Search:</strong> Walking around desired neighborhoods once you arrive.</li>
+                </ul>
+                <p>It's often recommended to book short-term accommodation for your first week/month and then search for a long-term rental in person.</p>
+            </div>
+            <div class="content-card">
+                <h3>Additional Resources</h3>
+                <div class="video-embed-container">
+                    <p>Next GREAT Thailand City for EXPATS — and its housing market is BOOMING!</p>
+                    <iframe width="200" height="113" src="https://www.youtube.com/embed/14" frameborder="0" allowfullscreen></iframe>
+                </div>
+                <div class="video-embed-container">
+                    <p>Buying property in Thailand</p>
+                    <a href="https://www.thaiembassy.com/property/buying-property-in-thailand" target="_blank" class="resource-link">thaiembassy.com/property</a>
+                </div>
+                <div class="video-embed-container">
+                    <p>Houses, condos etc. for rent or to buy</p>
+                    <a href="https://www.fazwaz.com" target="_blank" class="resource-link">fazwaz.com</a>
+                </div>
+                <div class="video-embed-container">
+                    <p>Hua Hin property search</p>
+                    <a href="https://huahin-property-search.com/" target="_blank" class="resource-link">huahin-property-search.com</a>
+                </div>
+            </div>
+        </section>
+
+        <section id="insurances" class="content-section">
+            <div class="section-intro">
+                <h2>Insurance(s) 🛡️</h2>
+                <p>Understanding and securing appropriate insurance is vital for your peace of mind and financial security in Thailand. This section outlines key insurance types to consider.</p>
+            </div>
+            <div class="content-card">
+                <h3>Health Insurance</h3>
+                <p>Essential for all expats. Options include:</p>
+                <ul>
+                    <li><strong>International Health Insurance:</strong> Comprehensive coverage, often portable.</li>
+                    <li><strong>Local Thai Health Insurance:</strong> Can be more affordable but may have limitations.</li>
+                    <li><strong>Travel Insurance:</strong> Good for short trips, but not sufficient for long-term residency.</li>
+                </ul>
+                <p>Ensure your policy covers inpatient and outpatient care, emergency evacuation, and has a good network of hospitals in Thailand.</p>
+            </div>
+            <div class="content-card">
+                <h3>Travel Insurance (Pre-Move)</h3>
+                <p>Before your permanent move, if you make scouting trips, ensure you have travel insurance that covers:</p>
+                <ul>
+                    <li>Trip cancellation/interruption.</li>
+                    <li>Medical emergencies abroad.</li>
+                    <li>Lost luggage.</li>
+                </ul>
+            </div>
+            <div class="content-card">
+                <h3>Other Insurances to Consider</h3>
+                <ul>
+                    <li><strong>Motorbike/Car Insurance:</strong> Mandatory if you plan to drive.</li>
+                    <li><strong>Property/Contents Insurance:</strong> For your rented home and belongings.</li>
+                    <li><strong>Life Insurance:</strong> Depending on your personal circumstances.</li>
+                </ul>
+            </div>
+            <div class="content-card">
+                <h3>Additional Resources</h3>
+                <div class="video-embed-container">
+                    <p>Health Insurance in Thailand</p>
+                    <iframe width="200" height="113" src="https://www.youtube.com/embed/23" frameborder="0" allowfullscreen></iframe>
+                </div>
+                <div class="video-embed-container">
+                    <p>Travel Insurance</p>
+                    <a href="https://safetywing.com/?referenceID=25111590&utm_source=25111590&utm_medium=Ambassador" target="_blank" class="resource-link">safetywing.com</a>
+                </div>
+            </div>
+        </section>
+
+        <section id="first_week_month" class="content-section">
+            <div class="section-intro">
+                <h2>First Week / Month 🗓️</h2>
+                <p>The initial period in a new country can be overwhelming. This section provides a guide to navigating your first week and month in Thailand, from arrival essentials to setting up your new life.</p>
+            </div>
+            <div class="content-card">
+                <h3>Upon Arrival (First Few Days)</h3>
+                <ul>
+                    <li><strong>Airport Transfer:</strong> Pre-book or use official taxi services.</li>
+                    <li><strong>Check into Temporary Accommodation:</strong> Rest and recover from jet lag.</li>
+                    <li><strong>Get a Local SIM Card:</strong> Essential for communication and data.</li>
+                    <li><strong>Exchange Currency:</strong> Get some Thai Baht for immediate expenses.</li>
+                    <li><strong>Basic Groceries:</strong> Stock up on essentials.</li>
+                </ul>
+            </div>
+            <div class="content-card">
+                <h3>First Month Priorities</h3>
+                <ul>
+                    <li><strong>Long-Term Accommodation:</strong> Begin serious property hunting.</li>
+                    <li><strong>Open a Thai Bank Account:</strong> For easier financial management.</li>
+                    <li><strong>Register with Embassy/Consulate:</strong> For emergency assistance.</li>
+                    <li><strong>Explore Local Area:</strong> Find markets, hospitals, restaurants, public transport.</li>
+                    <li><strong>Start Thai Language Practice:</strong> Even simple phrases help immensely.</li>
+                    <li><strong>Get a Thai Driving License:</strong> If you plan to drive.</li>
+                </ul>
+            </div>
+            <div class="content-card">
+                <h3>Additional Resources</h3>
+                <div class="video-embed-container">
+                    <p>Digital Arrival Card</p>
+                    <iframe width="200" height="113" src="https://www.youtube.com/embed/0" frameborder="0" allowfullscreen></iframe>
+                </div>
+                <div class="video-embed-container">
+                    <p>Guide to Your First Hour in Bangkok, Thailand</p>
+                    <iframe width="200" height="113" src="https://www.youtube.com/embed/1" frameborder="0" allowfullscreen></iframe>
+                </div>
+                <div class="video-embed-container">
+                    <p>E-sim</p>
+                    <a href="https://www.airalo.com/nl?irclickid=0hfwpQy20xyKW8V0tgxIa2svUksWeyQ1W3eL0M0&irgwc=1&utm_source=impact&utm_medium=affiliate&utm_campaign=The Bangkok Guide" target="_blank" class="resource-link">airalo.com</a>
+                </div>
+            </div>
+        </section>
+
+        <section id="language" class="content-section">
+            <div class="section-intro">
+                <h2>Language 🗣️</h2>
+                <p>Learning Thai will significantly enhance your experience and integration. This section provides tips and resources for language acquisition.</p>
+            </div>
+            <div class="content-card">
+                <h3>Why Learn Thai?</h3>
+                <ul>
+                    <li>Deeper cultural immersion.</li>
+                    <li>Easier daily interactions (markets, taxis).</li>
+                    <li>Shows respect to locals.</li>
+                    <li>Opens up more opportunities.</li>
+                </ul>
+            </div>
+            <div class="content-card">
+                <h3>Learning Resources</h3>
+                <ul>
+                    <li><strong>Language Schools:</strong> Many options in major cities for ED visas.</li>
+                    <li><strong>Online Apps:</strong> Pimsleur, Ling, Drops, Memrise.</li>
+                    <li><strong>YouTube Channels:</strong> ThaiPod101, Learn Thai with Mod.</li>
+                    <li><strong>Tutors:</strong> Private lessons for personalized learning.</li>
+                    <li><strong>Immersion:</strong> Practice with locals daily.</li>
+                </ul>
+            </div>
+            <div class="content-card">
+                <h3>Key Phrases to Start With</h3>
+                <ul>
+                    <li>Hello: Sawasdee krab/ka (สวัสดีครับ/ค่ะ)</li>
+                    <li>Thank you: Khop khun krab/ka (ขอบคุณครับ/ค่ะ)</li>
+                    <li>How much?: Nee tao rai? (นี่เท่าไหร่)</li>
+                    <li>Delicious: Aroy (อร่อย)</li>
+                    <li>Excuse me/Sorry: Khor thot krab/ka (ขอโทษครับ/ค่ะ)</li>
+                </ul>
+            </div>
+            <div class="content-card">
+                <h3>Additional Resources</h3>
+                <div class="video-embed-container">
+                    <p>GENIUS Translation Device will change Travel Forever</p>
+                    <iframe width="200" height="113" src="https://www.youtube.com/embed/3" frameborder="0" allowfullscreen></iframe>
+                </div>
+            </div>
+        </section>
+
+        <section id="food" class="content-section">
+            <div class="section-intro">
+                <h2>Food 🍜</h2>
+                <p>Thailand is a culinary paradise! This section introduces you to the diverse world of Thai cuisine, from street food delights to regional specialties, and tips for dining.</p>
+            </div>
+            <div class="content-card">
+                <h3>Thai Cuisine Highlights</h3>
+                <ul>
+                    <li><strong>Street Food:</strong> Affordable, diverse, and ubiquitous.</li>
+                    <li><strong>Regional Variations:</strong>
+                        <ul>
+                            <li>North: Sticky rice, curries (Khao Soi).</li>
+                            <li>Northeast (Isaan): Som Tum (papaya salad), Larb.</li>
+                            <li>Central: Pad Thai, Tom Yum Goong.</li>
+                            <li>South: Spicier curries, seafood.</li>
+                        </ul>
+                    </li>
+                    <li><strong>Fresh Fruits:</strong> Mango, durian, mangosteen, rambutan.</li>
+                </ul>
+            </div>
+            <div class="content-card">
+                <h3>Dining Tips</h3>
+                <ul>
+                    <li><strong>"Mai Phet" (ไม่เผ็ด):</strong> Not spicy (if you can't handle heat).</li>
+                    <li><strong>"Phet Mak" (เผ็ดมาก):</strong> Very spicy (if you love heat!).</li>
+                    <li><strong>Chopsticks vs. Fork/Spoon:</strong> Thai food is typically eaten with a fork and spoon.</li>
+                    <li><strong>Sharing is Caring:</strong> Dishes are often shared family-style.</li>
+                </ul>
+            </div>
+            <div class="content-card">
+                <h3>Additional Resources</h3>
+                <div class="video-embed-container">
+                    <p>Nang Loeng Market 🇹🇭 | Bangkok’s 100-Year-Old Hidden Gem You’ve Never Visited!</p>
+                    <iframe width="200" height="113" src="https://www.youtube.com/embed/22" frameborder="0" allowfullscreen></iframe>
+                </div>
+            </div>
+        </section>
+
+        <section id="travel" class="content-section">
+            <div class="section-intro">
+                <h2>Travel ✈️</h2>
+                <p>Thailand offers incredible travel opportunities both within the country and to neighboring regions. This section covers transportation, popular destinations, and general travel advice.</p>
+            </div>
+            <div class="content-card">
+                <h3>Getting Around Thailand</h3>
+                <ul>
+                    <li><strong>Flights:</strong> Domestic airlines connect major cities and islands.</li>
+                    <li><strong>Trains:</strong> Slower but scenic, especially overnight sleepers.</li>
+                    <li><strong>Buses/Vans:</strong> Extensive network, very affordable.</li>
+                    <li><strong>Tuk-Tuks & Songthaews:</strong> Iconic local transport.</li>
+                    <li><strong>Grab (Ride-hailing):</strong> Convenient in cities.</li>
+                </ul>
+            </div>
+            <div class="content-card">
+                <h3>Must-Visit Destinations</h3>
+                <ul>
+                    <li><strong>Bangkok:</strong> Temples, markets, nightlife.</li>
+                    <li><strong>Chiang Mai:</strong> Temples, mountains, cultural experiences.</li>
+                    <li><strong>Phuket/Krabi:</strong> Beaches, islands, diving.</li>
+                    <li><strong>Ayutthaya/Sukhothai:</strong> Historical parks.</li>
+                    <li><strong>Northern Thailand:</strong> Hill tribes, national parks.</li>
+                </ul>
+            </div>
+            <div class="content-card">
+                <h3>Additional Resources</h3>
+                <div class="video-embed-container">
+                    <p>in Thailand is NOT What You Think It's Like... —> Ko Samui</p>
+                    <iframe width="200" height="113" src="https://www.youtube.com/embed/12" frameborder="0" allowfullscreen></iframe>
+                </div>
+                <div class="video-embed-container">
+                    <p>Local transportation</p>
+                    <a href="https://12go.asia/nl" target="_blank" class="resource-link">12go.asia</a>
+                </div>
+                <div class="video-embed-container">
+                    <p>10 places to visit in Bangkok</p>
+                    <img src="https://i.imgur.com/wU979s5.png" alt="10 places to visit in Bangkok" class="resource-image">
+                </div>
+                <div class="video-embed-container">
+                    <p>Bangkok's Surrounding Gems: 10 Places To Visit Near Bangkok In Summer</p>
+                    <a href="https://www.punthaicoffee.com/en/blog/lifestyle/places-to-visit-near-bangkok-in-summer" target="_blank" class="resource-link">punthaicoffee.com</a>
+                </div>
+                <div class="video-embed-container">
+                    <p>Hidden Bangkok tours - Instagram</p>
+                    <a href="https://www.instagram.com/hiddenbangkoktours/" target="_blank" class="resource-link">Instagram: Hidden Bangkok Tours</a>
+                </div>
+            </div>
+        </section>
+
+        <section id="misc" class="content-section">
+            <div class="section-intro">
+                <h2>Misc ❓</h2>
+                <p>This section covers various other important considerations and tips for a smooth transition and enjoyable life in Thailand.</p>
+            </div>
+            <div class="content-card">
+                <h3>Culture & Etiquette</h3>
+                <ul>
+                    <li><strong>Wai:</strong> Traditional Thai greeting (palms together).</li>
+                    <li><strong>Head & Feet:</strong> Never touch someone's head; never point feet at people or Buddha images.</li>
+                    <li><strong>Monarchy:</strong> Show utmost respect for the King and Royal Family.</li>
+                    <li><strong>Temples:</strong> Dress modestly (shoulders and knees covered).</li>
+                    <li><strong>"Jai Yen Yen" (ใจเย็นๆ):</strong> Keep a cool heart, be patient.</li>
+                </ul>
+            </div>
+            <div class="content-card">
+                <h3>Healthcare System</h3>
+                <p>Thailand has a dual healthcare system:</p>
+                <ul>
+                    <li><strong>Public Hospitals:</strong> More affordable, but can be crowded and have language barriers.</li>
+                    <li><strong>Private Hospitals:</strong> High quality, English-speaking staff, modern facilities, higher cost.</li>
+                </ul>
+                <p>For serious medical needs, private hospitals are generally preferred by expats.</p>
+            </div>
+            <div class="content-card">
+                <h3>Connectivity & Utilities</h3>
+                <ul>
+                    <li><strong>Internet:</strong> Widely available and fast, especially in urban areas.</li>
+                    <li><strong>Electricity:</strong> 220V, 50Hz (Type A, B, C, F, G plugs).</li>
+                    <li><strong>Water:</strong> Tap water is generally not safe to drink; use bottled water.</li>
+                </ul>
+            </div>
+            <div class="content-card">
+                <h3>Additional Resources</h3>
+                <div class="video-embed-container">
+                    <p>Things I Wish I Knew BEFORE Visiting THAILAND</p>
+                    <iframe width="200" height="113" src="https://www.youtube.com/embed/2" frameborder="0" allowfullscreen></iframe>
+                </div>
+                <div class="video-embed-container">
+                    <p>in Thailand You CAN'T Do?!</p>
+                    <iframe width="200" height="113" src="https://www.youtube.com/embed/7" frameborder="0" allowfullscreen></iframe>
+                </div>
+                <div class="video-embed-container">
+                    <p>THINGS I WISH I KNEW BEFORE TRAVELING TO THAILAND</p>
+                    <iframe width="200" height="113" src="https://www.youtube.com/embed/9" frameborder="0" allowfullscreen></iframe>
+                </div>
+                <div class="video-embed-container">
+                    <p>Tips and Tricks</p>
+                    <iframe width="200" height="113" src="https://www.youtube.com/embed/10" frameborder="0" allowfullscreen></iframe>
+                </div>
+                <div class="video-embed-container">
+                    <p>to know BEFORE traveling to Thailand [25 TIPS]</p>
+                    <iframe width="200" height="113" src="https://www.youtube.com/embed/11" frameborder="0" allowfullscreen></iframe>
+                </div>
+                <div class="video-embed-container">
+                    <p>Article about Senior travelers: Tips and Tricks</p>
+                    <a href="https://www.cntraveler.com/story/the-golden-rules-of-retirement-travel" target="_blank" class="resource-link">cntraveler.com</a>
+                </div>
+                <div class="video-embed-container">
+                    <p>10 things NOT to do in Thailand</p>
+                    <img src="https://i.imgur.com/utRDCM8.png" alt="10 things NOT to do in Thailand" class="resource-image">
+                </div>
+                <div class="video-embed-container">
+                    <p>International Remote Jobs for Seniors in 2025 | Worldwide work from home jobs</p>
+                    <iframe width="200" height="113" src="https://www.youtube.com/embed/15" frameborder="0" allowfullscreen></iframe>
+                </div>
+                <div class="video-embed-container">
+                    <p>Easy Way to Make Friends After Moving to Thailand</p>
+                    <iframe width="200" height="113" src="https://www.youtube.com/embed/16" frameborder="0" allowfullscreen></iframe>
+                </div>
+                <div class="video-embed-container">
+                    <p>Do This in Thailand!</p>
+                    <iframe width="200" height="113" src="https://www.youtube.com/embed/17" frameborder="0" allowfullscreen></iframe>
+                </div>
+                <div class="video-embed-container">
+                    <p>you need to know about</p>
+                    <iframe width="200" height="113" src="https://www.youtube.com/embed/18" frameborder="0" allowfullscreen></iframe>
+                </div>
+                <div class="video-embed-container">
+                    <p>Scams you need to know about (table)</p>
+                    <a href="https://docs.google.com/spreadsheets/d/1k_Igz8NWnIzTnOvnahF0cf_F3x95kNvsODUEfFS_d2w/edit?gid=1509874618#gid=1509874618" target="_blank" class="resource-link">Google Sheets: Scams</a>
+                </div>
+                <div class="video-embed-container">
+                    <p>of … someshing… 🙂</p>
+                    <iframe width="200" height="113" src="https://www.youtube.com/embed/19" frameborder="0" allowfullscreen></iframe>
+                </div>
+                <div class "video-embed-container">
+                    <p>This Dutch Multi-Millionaire Retired In Thailand</p>
+                    <iframe width="200" height="113" src="https://www.youtube.com/embed/20" frameborder="0" allowfullscreen></iframe>
+                </div>
+                <div class="video-embed-container">
+                    <p>Parker - YouTube Channel</p>
+                    <iframe width="200" height="113" src="https://www.youtube.com/embed/21" frameborder="0" allowfullscreen></iframe>
+                </div>
+                <div class="video-embed-container">
+                    <p>WINKELEN in BANGKOK 🇹🇭 THAILAND (we moeten verhuizen)</p>
+                    <iframe width="200" height="113" src="https://www.youtube.com/embed/24" frameborder="0" allowfullscreen></iframe>
+                </div>
+            </div>
+        </section>
+
+        <section id="links" class="content-section">
+            <div class="section-intro">
+                <h2>Links 🔗</h2>
+                <p>Useful links for your Thailand move and expat life.</p>
+            </div>
+            <div class="content-card">
+                <h3>Curated Links</h3>
+                <ul>
+                    <li>under construction</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="youtube_channels" class="content-section">
+            <div class="section-intro">
+                <h2>YouTube Channels 📺</h2>
+                <p>Recommended YouTube channels about Thailand and expat living.</p>
+            </div>
+            <div class="content-card">
+                <h3>Channel List</h3>
+                <ul>
+                    <li>under construction</li>
+                </ul>
+            </div>
+        </section>
+
+    </main>
+
+    <img src="man_and_woman_no_bg.png" alt="Man and Woman" class="sticky-bottom-right">
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const navLinks = document.querySelectorAll('#move-nav a.sidebar-link');
+            const contentSections = document.querySelectorAll('.content-section');
+            const firstSectionId = navLinks[0].getAttribute('data-section');
+
+            function showSection(sectionId) {
+                contentSections.forEach(section => {
+                    section.classList.remove('active');
+                    if (section.id === sectionId) {
+                        section.classList.add('active');
+                    }
+                });
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('data-section') === sectionId) {
+                        link.classList.add('active');
+                    }
+                });
+            }
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const sectionId = this.getAttribute('data-section');
+                    showSection(sectionId);
+                });
+            });
+
+            showSection(firstSectionId);
+
+            const ctxTimeline = document.getElementById('planningTimelineChart');
+            if (ctxTimeline) {
+                new Chart(ctxTimeline, {
+                    type: 'bar',
+                    data: {
+                        labels: [
+                            'Year 1: Initial Research & Saving',
+                            'Year 2: Skill Development & Declutter',
+                            'Year 3: Deep Dive Research & Financial Review',
+                            'Year 4: Visa Application & Logistics',
+                            'Year 5: Final Preparations & Move'
+                        ],
+                        datasets: [{
+                            label: 'Planning Focus',
+                            data: [100, 100, 100, 100, 100],
+                            backgroundColor: [
+                                'rgba(255, 206, 86, 0.7)', // Amber for early planning
+                                'rgba(75, 192, 192, 0.7)', // Green for development
+                                'rgba(153, 102, 255, 0.7)', // Purple for review
+                                'rgba(255, 99, 132, 0.7)', // Red for critical tasks
+                                'rgba(54, 162, 235, 0.7)'  // Blue for final steps
+                            ],
+                            borderColor: [
+                                'rgba(255, 206, 86, 1)',
+                                'rgba(75, 192, 192, 1)',
+                                'rgba(153, 102, 255, 1)',
+                                'rgba(255, 99, 132, 1)',
+                                'rgba(54, 162, 235, 1)'
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        indexAxis: 'y', // Horizontal bars for timeline
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            x: {
+                                beginAtZero: true,
+                                max: 100,
+                                display: false // Hide x-axis as it's just a conceptual "progress"
+                            },
+                            y: {
+                                ticks: {
+                                    font: {
+                                        size: 12
+                                    },
+                                    callback: function(value, index, values) {
+                                        const label = this.getLabelForValue(value);
+                                        if (label.length > 16) {
+                                            return label.split(' ').reduce((acc, word) => {
+                                                const lastLine = acc[acc.length - 1];
+                                                if (lastLine && (lastLine + ' ' + word).length <= 16) {
+                                                    acc[acc.length - 1] += ' ' + word;
+                                                } else {
+                                                    acc.push(word);
+                                                }
+                                                return acc;
+                                            }, []).join('\n');
+                                        }
+                                        return label;
+                                    }
+                                }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                display: false // No need for legend for single dataset
+                            },
+                            title: {
+                                display: true,
+                                text: 'Conceptual 5-Year Move Planning Timeline',
+                                font: { size: 16 }
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        return context.label;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
