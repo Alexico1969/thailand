@@ -100,7 +100,7 @@
             font-size: 0.9rem;
             color: #0D9488;
             text-decoration: underline;
-            text-align: center;
+            text-align: left;
         }
         .resource-image {
             max-width: 200px;
@@ -674,6 +674,10 @@
                         link.classList.add('active');
                     }
                 });
+                // Scroll main content and window to top when switching sections
+                const main = document.querySelector('main');
+                if (main) main.scrollTop = 0;
+                window.scrollTo({ top: 0, behavior: 'auto' });
             }
 
             navLinks.forEach(link => {
@@ -691,87 +695,65 @@
                 new Chart(ctxTimeline, {
                     type: 'bar',
                     data: {
-                        labels: [
-                            'Year 1: Initial Research & Saving',
-                            'Year 2: Skill Development & Declutter',
-                            'Year 3: Deep Dive Research & Financial Review',
-                            'Year 4: Visa Application & Logistics',
-                            'Year 5: Final Preparations & Move'
-                        ],
+                        labels: ['Year 1', 'Year 2', 'Year 3', 'Year 4', 'Year 5'],
                         datasets: [{
-                            label: 'Planning Focus',
-                            data: [100, 100, 100, 100, 100],
-                            backgroundColor: [
-                                'rgba(255, 206, 86, 0.7)', // Amber for early planning
-                                'rgba(75, 192, 192, 0.7)', // Green for development
-                                'rgba(153, 102, 255, 0.7)', // Purple for review
-                                'rgba(255, 99, 132, 0.7)', // Red for critical tasks
-                                'rgba(54, 162, 235, 0.7)'  // Blue for final steps
-                            ],
-                            borderColor: [
-                                'rgba(255, 206, 86, 1)',
-                                'rgba(75, 192, 192, 1)',
-                                'rgba(153, 102, 255, 1)',
-                                'rgba(255, 99, 132, 1)',
-                                'rgba(54, 162, 235, 1)'
-                            ],
+                            label: 'Planning Tasks',
+                            data: [12, 19, 3, 5, 2],
+                            backgroundColor: '#0D9488',
+                            borderColor: '#0D9488',
                             borderWidth: 1
                         }]
                     },
                     options: {
-                        indexAxis: 'y', // Horizontal bars for timeline
                         responsive: true,
-                        maintainAspectRatio: false,
                         scales: {
-                            x: {
-                                beginAtZero: true,
-                                max: 100,
-                                display: false // Hide x-axis as it's just a conceptual "progress"
-                            },
                             y: {
-                                ticks: {
-                                    font: {
-                                        size: 12
-                                    },
-                                    callback: function(value, index, values) {
-                                        const label = this.getLabelForValue(value);
-                                        if (label.length > 16) {
-                                            return label.split(' ').reduce((acc, word) => {
-                                                const lastLine = acc[acc.length - 1];
-                                                if (lastLine && (lastLine + ' ' + word).length <= 16) {
-                                                    acc[acc.length - 1] += ' ' + word;
-                                                } else {
-                                                    acc.push(word);
-                                                }
-                                                return acc;
-                                            }, []).join('\n');
-                                        }
-                                        return label;
-                                    }
-                                }
-                            }
-                        },
-                        plugins: {
-                            legend: {
-                                display: false // No need for legend for single dataset
-                            },
-                            title: {
-                                display: true,
-                                text: 'Conceptual 5-Year Move Planning Timeline',
-                                font: { size: 16 }
-                            },
-                            tooltip: {
-                                callbacks: {
-                                    label: function(context) {
-                                        return context.label;
-                                    }
-                                }
+                                beginAtZero: true
                             }
                         }
                     }
                 });
             }
         });
+        // Fetch and display links.txt
+        fetch('links.txt')
+            .then(response => response.text())
+            .then(text => {
+                const ul = document.querySelector('#links ul');
+                if (!ul) return;
+                ul.innerHTML = '';
+                text.split('\n').forEach(line => {
+                    const [url, desc] = line.split(',');
+                    if (url && desc) {
+                        const li = document.createElement('li');
+                        li.innerHTML = `<a href="${url.trim()}" target="_blank" class="resource-link">${desc.trim()}</a>`;
+                        ul.appendChild(li);
+                    }
+                });
+                if (!ul.hasChildNodes()) {
+                    ul.innerHTML = '<li>under construction</li>';
+                }
+            });
+
+        // Fetch and display channels.txt
+        fetch('channels.txt')
+            .then(response => response.text())
+            .then(text => {
+                const ul = document.querySelector('#youtube_channels ul');
+                if (!ul) return;
+                ul.innerHTML = '';
+                text.split('\n').forEach(line => {
+                    const [url, desc] = line.split(',');
+                    if (url && desc) {
+                        const li = document.createElement('li');
+                        li.innerHTML = `<a href="${url.trim()}" target="_blank" class="resource-link">${desc.trim()}</a>`;
+                        ul.appendChild(li);
+                    }
+                });
+                if (!ul.hasChildNodes()) {
+                    ul.innerHTML = '<li>under construction</li>';
+                }
+            });
     </script>
 </body>
 </html>
