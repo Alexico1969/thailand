@@ -137,6 +137,9 @@
                 <li><a href="#" class="sidebar-link block py-2 px-3 mb-2 rounded-md hover:bg-teal-100 hover:text-teal-700 transition-colors" data-section="misc">Misc</a></li>
                 <li><a href="#" class="sidebar-link block py-2 px-3 mb-2 rounded-md hover:bg-teal-100 hover:text-teal-700 transition-colors" data-section="links">Links</a></li>
                 <li><a href="#" class="sidebar-link block py-2 px-3 mb-2 rounded-md hover:bg-teal-100 hover:text-teal-700 transition-colors" data-section="youtube_channels">YouTube Channels</a></li>
+                <li>
+                    <a href="#" class="sidebar-link block py-2 px-3 mb-2 rounded-md hover:bg-teal-100 hover:text-teal-700 transition-colors" data-section="baht_dollar">Baht to Dollar Conversion</a>
+                </li>
             </ul>
         </nav>
     </aside>
@@ -651,6 +654,23 @@
             </div>
         </section>
 
+        <section id="baht_dollar" class="content-section">
+            <div class="section-intro">
+                <h2>Baht ⇄ Dollar Conversion 💱</h2>
+                <p>Convert between Thai Baht and US Dollar using the fields below.</p>
+            </div>
+            <div class="content-card">
+                <label for="bahtInput" class="block mb-2 font-semibold">Baht (THB):</label>
+                <input type="number" id="bahtInput" class="border rounded px-2 py-1 mb-2 w-full" placeholder="Enter amount in Baht">
+                <button id="toDollarBtn" class="bg-teal-600 text-white px-4 py-1 rounded mb-4">Convert to Dollar</button>
+                <br>
+                <label for="dollarInput" class="block mb-2 font-semibold mt-4">Dollar (USD):</label>
+                <input type="number" id="dollarInput" class="border rounded px-2 py-1 mb-2 w-full" placeholder="Enter amount in Dollar">
+                <button id="toBahtBtn" class="bg-teal-600 text-white px-4 py-1 rounded">Convert to Baht</button>
+                <div id="conversionResult" class="mt-4 font-bold text-teal-700"></div>
+            </div>
+        </section>
+
     </main>
 
     <img src="man_and_woman_no_bg.png" alt="Man and Woman" class="sticky-bottom-right">
@@ -754,6 +774,27 @@
                     ul.innerHTML = '<li>under construction</li>';
                 }
             });
+
+        document.getElementById('toDollarBtn').addEventListener('click', function () {
+            const baht = parseFloat(document.getElementById('bahtInput').value);
+            const rate = 36; // Example rate, adjust as needed
+            if (!isNaN(baht)) {
+                const usd = (baht / rate).toFixed(2);
+                document.getElementById('conversionResult').textContent = `${baht} THB ≈ $${usd} USD`;
+            } else {
+                document.getElementById('conversionResult').textContent = 'Please enter a valid Baht amount.';
+            }
+        });
+        document.getElementById('toBahtBtn').addEventListener('click', function () {
+            const usd = parseFloat(document.getElementById('dollarInput').value);
+            const rate = 36; // Example rate, adjust as needed
+            if (!isNaN(usd)) {
+                const baht = (usd * rate).toFixed(2);
+                document.getElementById('conversionResult').textContent = `$${usd} USD ≈ ${baht} THB`;
+            } else {
+                document.getElementById('conversionResult').textContent = 'Please enter a valid Dollar amount.';
+            }
+        });
     </script>
 </body>
 </html>
