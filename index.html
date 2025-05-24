@@ -205,9 +205,9 @@
                 <li><a href="#" class="sidebar-link block py-2 px-3 mb-2 rounded-md hover:bg-teal-100 hover:text-teal-700 transition-colors" data-section="misc">Misc</a></li>
                 <li><a href="#" class="sidebar-link block py-2 px-3 mb-2 rounded-md hover:bg-teal-100 hover:text-teal-700 transition-colors" data-section="links">Links</a></li>
                 <li><a href="#" class="sidebar-link block py-2 px-3 mb-2 rounded-md hover:bg-teal-100 hover:text-teal-700 transition-colors" data-section="youtube_channels">YouTube Channels</a></li>
-                <li>
-                    <a href="#" class="sidebar-link block py-2 px-3 mb-2 rounded-md hover:bg-teal-100 hover:text-teal-700 transition-colors" data-section="baht_dollar">Baht to Dollar Conversion</a>
-                </li>
+                <li><a href="#" class="sidebar-link block py-2 px-3 mb-2 rounded-md hover:bg-teal-100 hover:text-teal-700 transition-colors" data-section="notes">Notes</a></li>
+                <li><a href="#" class="sidebar-link block py-2 px-3 mb-2 rounded-md hover:bg-teal-100 hover:text-teal-700 transition-colors" data-section="baht_dollar">Baht to Dollar Conversion</a></li>
+
             </ul>
         </nav>
     </aside>
@@ -722,6 +722,20 @@
             </div>
         </section>
 
+                <!-- Add the new Notes section -->
+        <section id="notes" class="content-section">
+            <div class="section-intro">
+                <h2>Notes 📝</h2>
+                <p>Personal notes and reminders for your Thailand move planning.</p>
+            </div>
+            <div class="content-card">
+                <h3>Curated Notes</h3>
+                <ul>
+                    <li>under construction</li>
+                </ul>
+            </div>
+        </section>
+
         <section id="baht_dollar" class="content-section">
             <div class="section-intro">
                 <h2>Baht ⇄ Dollar Conversion 💱</h2>
@@ -738,6 +752,8 @@
                 <div id="conversionResult" class="mt-4 font-bold text-teal-700"></div>
             </div>
         </section>
+
+
 
     </main>
 
@@ -852,6 +868,25 @@
                     if (url && desc) {
                         const li = document.createElement('li');
                         li.innerHTML = `<a href="${url.trim()}" target="_blank" class="resource-link">${desc.trim()}</a>`;
+                        ul.appendChild(li);
+                    }
+                });
+                if (!ul.hasChildNodes()) {
+                    ul.innerHTML = '<li>under construction</li>';
+                }
+            });
+
+        // Fetch and display notes.txt
+        fetch('notes.txt')
+            .then(response => response.text())
+            .then(text => {
+                const ul = document.querySelector('#notes ul');
+                if (!ul) return;
+                ul.innerHTML = '';
+                text.split('\n').forEach(line => {
+                    if (line.trim()) {
+                        const li = document.createElement('li');
+                        li.textContent = line.trim();
                         ul.appendChild(li);
                     }
                 });
