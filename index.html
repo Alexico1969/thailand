@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thailand Move Planner: Your 5-Year Journey</title>
+    <title>Thailand Move Planner</title>
     <link rel="icon" type="image/png" href="ico.png">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -463,6 +463,8 @@
                     <a href="https://www.airalo.com/nl?irclickid=0hfwpQy20xyKW8V0tgxIa2svUksWeyQ1W3eL0M0&irgwc=1&utm_source=impact&utm_medium=affiliate&utm_campaign=The Bangkok Guide" target="_blank" class="resource-link">airalo.com</a>
                 </div>
             </div>
+            <img src="first_weeks.png" alt="First Week / Month" >
+            
         </section>
 
         <section id="language" class="content-section">
@@ -887,7 +889,7 @@
                 text.split('\n').forEach(line => {
                     if (line.trim()) {
                         const li = document.createElement('li');
-                        li.textContent = line.trim();
+                        li.innerHTML = line.trim(); // Allow HTML markup in notes.txt
                         ul.appendChild(li);
                     }
                 });
