@@ -1,36 +1,75 @@
 <h3>HOUSING:</h3>
------------
-'Service appartments' are more regulated, short term stay options.
-REVIEWS are you best bet on finding a good property agent or any business really..
-You're going to need a TM30 form. Usually the selling party will take care of that.
+<hr>
+<ul>
+  <li>'Service apartments' are more regulated, short-term stay options.</li>
+  <li>Reviews are your best bet for finding a good property agent or any business, really.</li>
+  <li>You're going to need a TM30 form. Usually the selling party will take care of that.</li>
+</ul>
 
 <h3>VISA:</h3>
--------
-Steps for the non-immigrant 'O' VISA: 
+<hr>
+<p>Steps for the Non-Immigrant 'O' Visa:</p>
+<ul>
+  <li>Have $23,000 in a US/EU bank account.</li>
+  <li>Apply for a 90-day visa (through the Thai Embassy in your country).</li>
+  <li>Open a Thai bank account.</li>
+  <li>Deposit $23,000 into your Thai bank account.</li>
+  <li>Get proof of residence.</li>
+  <li>Extend the 90-day visa to 12 months.</li>
+</ul>
 
- -> have $ 23,000 in a US / EU bank account
- -> 90 day visa (get through Thai Embassy in your country)
- -> open a Thai bank account
- -> deposit $ 23,000
- -> get proof of residence
- -> Extend the 90-day visa for 12 months
+<h3>PROS/CONS per city</h3>
+<hr>
 
-<h3>PROS/CONS per city
------------------------
+<h4>PATTAYA</h4>
+<ul>
+  <li><strong>Pros:</strong>
+    <ul>
+      <li>Many condos for rent/sale</li>
+      <li>Food (many restaurants)</li>
+      <li>Beaches / close to islands</li>
+      <li>Less rain</li>
+      <li>Geared towards older people / retirees</li>
+    </ul>
+  </li>
+  <li><strong>Cons:</strong>
+    <ul>
+      <li>Pretty hot</li>
+      <li>Prices fluctuate during high/low season</li>
+    </ul>
+  </li>
+</ul>
 
-<h3>PATTAYA</h3>
+<h4>BANGKOK</h4>
+<ul>
+  <li><strong>Pros:</strong>
+    <ul>
+      <li>Excellent transportation (in the city and around Thailand)</li>
+    </ul>
+  </li>
+  <li><strong>Cons:</strong>
+    <ul>
+      <li>Crazy traffic</li>
+      <li>Poor air quality</li>
+      <li>Rains a lot</li>
+    </ul>
+  </li>
+</ul>
 
-pros:
-
-- Many condos for rent / sale
-- Food (many restaurants)
-- Beaches / close to Islands
-- Less Rain
-- Geared towards older / retirees
-
-cons:
-
-- Pretty hot
-- Prices fluctuating during high/low season
-
-BANGKOK
+<h4>PHUKET</h4>
+<ul>
+  <li><strong>Pros:</strong>
+    <ul>
+      <li>Easy to access</li>
+      <li>Best beaches</li>
+      <li>Easy access to Indonesia</li>
+      <li>Catered somewhat to Westerners</li>
+      <li>Fewer expats (beaches are less crowded)</li>
+    </ul>
+  </li>
+  <li><strong>Cons:</strong>
+    <ul>
+      <li>A bit more expensive</li>
+    </ul>
+  </li>
+</ul>
