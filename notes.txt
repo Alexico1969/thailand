@@ -1,13 +1,7 @@
 <h3>Number of TOURIST POLICE: 1155</h3>
 
-<h3>The history of Thailand</h3>
-<iframe width="560" height="315" 
-    src="https://www.youtube.com/embed/zo1e7XUWkME" 
-    title="YouTube video player" 
-    frameborder="0" 
-    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-    allowfullscreen>
-</iframe>
+<h3>Apps to install on your phone</h3>
+<strong><a href="https://www.youtube.com/watch?v=uGWP4bVyaTc">>>> YOUTUBE CLIP HERE</a></strong>
 
 <h3>Iconsiam mall (big mall!)</h3>
 
