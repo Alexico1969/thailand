@@ -884,23 +884,17 @@
                 }
             });
 
-        // Fetch and display notes.txt
+        // Fetch and display notes.txt as regular HTML (not as <ul>/<li>)
         fetch('notes.txt')
             .then(response => response.text())
             .then(text => {
-                const ul = document.querySelector('#notes ul');
-                if (!ul) return;
-                ul.innerHTML = '';
-                text.split('\n').forEach(line => {
-                    if (line.trim()) {
-                        const li = document.createElement('li');
-                        li.innerHTML = line.trim(); // Allow HTML markup in notes.txt
-                        ul.appendChild(li);
-                    }
-                });
-                if (!ul.hasChildNodes()) {
-                    ul.innerHTML = '<li>under construction</li>';
-                }
+                const notesSection = document.querySelector('#notes .content-card');
+                if (!notesSection) return;
+                // Remove the <ul> inside .content-card if it exists
+                const ul = notesSection.querySelector('ul');
+                if (ul) ul.remove();
+                // Insert the HTML from notes.txt directly
+                notesSection.insertAdjacentHTML('beforeend', `<div class="notes-html">${text}</div>`);
             });
 
         document.getElementById('toDollarBtn').addEventListener('click', function () {
